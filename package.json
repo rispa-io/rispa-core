@@ -3,11 +3,10 @@
   "version": "0.1.0",
   "description": "rispa core plugin",
   "devDependencies": {
-    "@rispa/eslint-config": "^1.0.0",
+    "@rispa/eslint-config": "^1.0.1",
     "jest": "^20.0.3"
   },
   "dependencies": {
-    "babel-register": "^6.24.1",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-dynamic-import-webpack": "^1.0.1",
     "babel-plugin-transform-class-properties": "^6.24.1",
@@ -19,8 +18,9 @@
     "babel-preset-es2016": "^6.24.1",
     "babel-preset-es2017": "^6.24.1",
     "babel-preset-react": "^6.24.1",
-    "glob": "^7.1.1",
+    "babel-register": "^6.24.1",
     "debug": "^2.6.6",
+    "glob": "^7.1.2",
     "plop": "^1.7.4"
   },
   "scripts": {
@@ -34,8 +34,9 @@
   "jest": {
     "collectCoverageFrom": [
       "**/*.js",
-      "!**/babel.js",
-      "!**/.eslintrc.js"
+      "!babel.js",
+      "!index.js",
+      "!.eslintrc.js"
     ],
     "coveragePathIgnorePatterns": [
       "/coverage/"
