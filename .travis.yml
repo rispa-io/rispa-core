@@ -1,0 +1,21 @@
+language: node_js
+
+node_js:
+  - "stable"
+
+sudo: false
+
+script:
+  - yarn lint
+  - yarn test:coverage
+
+notifications:
+  slack:
+    rooms:
+      - secure: "NzUmsmI8nfNG1hItaOin0EZ+XtHE3FiAH63P53tHvvGdSc0lzj8ggTN2zyhEQLdcKaYz7O6k6DqcOTcgLDm2nAKN4sC2XptqJLGqhx5Kxt4L2yGsYWDzDQC74GqoorQVHoHTanTty5gj+e781TBr4d+T2KTsqPv4BksxAooTEZMDgOQustsoN96n+zKuJ9dOFAdRCuXI6O3XOX3numcS4Ld02p5gxJXoi/ffh/5zw3yAC60POkzh2KBeOg51zCpPbvzRxltERdYEtjEd9aGA54UBxmbXIu7c+AWTYEBdSkkKFohgTzxcg8Nbje187QefXVL5RA3ZyAnVMPj1/dztr3H0EAWfyiInWfrkMLxUNqaNq3rsCuaLOtYgJVx2KkmW6vl2SGU+lz9ONd09UIlgGJG93ei/1KDDOahB3n/55S9YU3LQAxsHbokX4tc8kBB4ccTUgitjut+jnqRalogWijV26n6Icd+LSogzqBvwE3sMfanNgWbLZ6iL94/NZUbOK0joh+mLBZPfc5/63Ch5KqoatSG09nJVRJLpRuygUcFtvFGkF2uTFTgC1Ljc/dbZ4fTdThqDpRwebYy4b0EWBlpdSmBNUxv65ka/CdvW5s39rp5gLwgMWdJOKc1HrhSag4DrzRQ5exZnZtuAn9YqLqaFQAHM4TFis1sKlaGhNMM="
+    on_success: always
+    on_failure: always
+    on_start: never
+
+cache:
+  yarn: true
