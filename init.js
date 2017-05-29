@@ -1,7 +1,7 @@
-import glob from 'glob'
-import path from 'path'
-import EventEmitter from 'events'
-import createRegistry from './registry'
+const glob = require('glob')
+const path = require('path')
+const EventEmitter = require('events')
+const createRegistry = require('./registry')
 
 const init = (command, data) => {
   /* eslint-disable global-require, import/no-dynamic-require */
@@ -23,4 +23,4 @@ const init = (command, data) => {
   emitter.emit('start', command, registry, data)
 }
 
-export default init
+module.exports = init

@@ -1,8 +1,8 @@
-let EventEmitter = jest.genMockFromModule('events')
+const mockEventEmitter = jest.genMockFromModule('events')
 
 let mockMethods
 
-EventEmitter = function () {
+function EventEmitter() {
   Object.assign(this, mockMethods)
 }
 
@@ -10,4 +10,4 @@ EventEmitter.setMockMethods = newMockMethods => {
   mockMethods = newMockMethods
 }
 
-module.exports = EventEmitter
+module.exports = Object.assign(EventEmitter, mockEventEmitter)

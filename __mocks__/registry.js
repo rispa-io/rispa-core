@@ -1,11 +1,11 @@
-let registry = jest.genMockFromModule('../registry')
+const mockRegistry = jest.genMockFromModule('../registry')
 
 let mockReturnValue
 
-registry = function () {
+function registry() {
   return mockReturnValue
 }
 
 registry.setMockReturnValue = newMockReturnValue => { mockReturnValue = newMockReturnValue }
 
-module.exports = registry
+module.exports = Object.assign(registry, mockRegistry)
