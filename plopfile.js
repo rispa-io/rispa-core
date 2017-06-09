@@ -1,9 +1,11 @@
+import { generator as generatorEvent } from './events'
+
 const path = require('path')
 const fs = require('fs')
 const core = require('./index')
 
 module.exports = plop => {
-  core('generator', plop)
+  core(generatorEvent(), plop)
 
   const featureList =
     fs.readdirSync('../')
