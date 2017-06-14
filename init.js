@@ -3,18 +3,33 @@ const path = require('path')
 const EventEmitter = require('events')
 const createRegistry = require('./registry')
 
-const init = (command, data) => {
+const getActivators = () => {
   /* eslint-disable global-require, import/no-dynamic-require */
   const relPath = path.resolve(__dirname, '../')
   const activators = glob
     .sync(`${relPath}/*/.rispa/activator.js`)
     .map(activator => require(activator))
+  return activators
+}
 
-  const emitter = new EventEmitter()
-  const on = (event, handler) => emitter.on(event, handler)
-  const off = (event, handler) => emitter.removeListener(event, handler)
+export function init(command, data, activators, emitter) {
+  const on = (originalEvent, originalHandler) => {
+    const [event, parsedCommand] = originalEvent.split(':')
+    const anyCmdAllowded = parsedCommand === undefined
 
-  activators.forEach(activator => activator(on, off))
+    const handler = (cmd, registry) => {
+      if (anyCmdAllowded || parsedCommand === cmd) {
+        originalHandler(registry)
+      }
+    }
+    emitter.on(event, handler)
+
+    return function off() {
+      emitter.removeListener(event, handler)
+    }
+  }
+
+  activators.forEach(activator => activator(on))
 
   const registry = createRegistry()
 
@@ -23,4 +38,8 @@ const init = (command, data) => {
   emitter.emit('start', command, registry, data)
 }
 
-module.exports = init
+export default function runInit(command, data) {
+  const activators = getActivators()
+  const emitter = new EventEmitter()
+  init(command, data, activators, emitter)
+}
