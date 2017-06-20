@@ -1,5 +1,4 @@
-import { generator as generatorEvent } from './events'
-
+const { generator: generatorEvent } = require('./events')
 const path = require('path')
 const fs = require('fs')
 const core = require('./index')
