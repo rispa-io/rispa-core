@@ -1,10 +1,10 @@
+const fs = require('fs-extra')
 const glob = require('glob')
 const path = require('path')
 const EventEmitter = require('events')
 const createRegistry = require('./registry')
 
-const getActivators = () => {
-  /* eslint-disable global-require, import/no-dynamic-require */
+const scanActivators = () => {
   const relPath = path.resolve(__dirname, '../')
   const activators = glob
     .sync(`${relPath}/*/.rispa/activator.js`)
@@ -12,14 +12,33 @@ const getActivators = () => {
   return activators
 }
 
+const getActivatorsFromCache = () => {
+  const cacheActivatorsPath = path.resolve(__dirname, '../../build/activators.json')
+
+  const cache = fs.readJsonSync(cacheActivatorsPath, { throws: false })
+
+  if (cache) {
+    const activators = Object.values(cache.packages)
+      .map(plugin => plugin.activatorPath)
+      .filter(activator => !!activator)
+      .map(activator => require(activator))
+
+    return activators
+  }
+
+  return false
+}
+
+const getActivators = () => getActivatorsFromCache() || scanActivators()
+
 export function init(command, data, activators, emitter) {
   const on = (originalEvent, originalHandler) => {
     const [event, parsedCommand] = originalEvent.split(':')
-    const anyCmdAllowded = parsedCommand === undefined
+    const anyCmdAllowed = parsedCommand === undefined
 
-    const handler = (cmd, registry) => {
-      if (anyCmdAllowded || parsedCommand === cmd) {
-        originalHandler(registry)
+    const handler = (cmd, registry, commandData) => {
+      if (anyCmdAllowed || parsedCommand === cmd) {
+        originalHandler(registry, commandData)
       }
     }
     emitter.on(event, handler)
