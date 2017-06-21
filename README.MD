@@ -79,18 +79,18 @@ rispa&#x2011;webpack       |Makes build for dev server and production
 ## Running the App
 To start work you should install rispa-cli globally. It provides command to run and maintain app:
 
-```
+```bash
 yarn global add rispa-cli
 ```
 or
-```
+```bash
 npm install -g rispa-cli
 ```
 
 We use yarn as a package manager by default. To switch to npm you may change it in the lerna configuration (lerna.json)
 
 Each plugin has its own commands which you can run in project root using following syntax:
-```
+```bash
 ris [pluginName] [commandName]
 ```
 
@@ -136,7 +136,7 @@ Then pick `feature-plugin` in the list and specify the name. The plugin will be 
 `index.js` specified as a `main` property in the `package.json` of the plugin. It exports the function which should return the config for router (object which contains `path` and `component` properties).
 
 
-<pre>
+```javascript
 import { Loadable } from '@rispa/vendor/loadable'
 
 const loadable = (store, when) => Loadable({
@@ -147,18 +147,18 @@ const loadable = (store, when) => Loadable({
 })
 
 const createRoute = (store, when) => ({
-  path: '<b>/path</b>',
+  path: '/path',
   component: loadable(store, when),
 })
 
 export default createRoute
-</pre>
+```
 
 We use Loadable for code splitting and async loading chunks.
 
 `register.js` exports the function which accepts `store` and `when` parameters for injecting reducers or registering data loading for plugin. Function should return the component which will be displayed for specified route:
 
-```
+```javascript
 import Component from './components/Component/'
 import reducer, { action } from './redux/reducer'
 import { when, match } from '@rispa/redux/when'
@@ -184,7 +184,7 @@ export default registerModule
 
 After you create a plugin you should register it in the rispa-routes plugin. First of all add your plugin as a dependency for rispa-routes in its package.json:
 
-<pre>
+```json
 {
   "name": "@rispa/routes",
   "version": "0.1.0",
@@ -193,25 +193,25 @@ After you create a plugin you should register it in the rispa-routes plugin. Fir
     "@rispa/eslint-config": "^1.0.0"
   },
   "dependencies": {
-    <b>"feature-plugin": "^0.1.0",</b>
+    "feature-plugin": "^0.1.0",
     "react-router-dom": "^4.1.1",
     "react": "15.5.4",
     "react-dom": "15.5.4"
   }
 }
-</pre>
+```
 
 
 Then add `require('feature-plugin')` to modules array in the `index.js` of the `rispa-routes` plugin:
 
-<pre>
+```javascript
 import React from 'react'
 import { Switch, Route } from 'react-router-dom'
 
 const getRoutes = (store, when) => {
   /* eslint-disable global-require */
   const modules = [
-    <b>require('feature-plugin')</b>
+    require('feature-plugin')
     // $$ ADD HERE ~~ Do not remove
   ]
 
@@ -227,5 +227,5 @@ const getRoutes = (store, when) => {
 }
 
 export default getRoutes
-</pre>
+```
 
