@@ -36,9 +36,9 @@ export function init(command, data, activators, emitter) {
     const [event, parsedCommand] = originalEvent.split(':')
     const anyCmdAllowed = parsedCommand === undefined
 
-    const handler = (cmd, registry) => {
+    const handler = (cmd, registry, commandData) => {
       if (anyCmdAllowed || parsedCommand === cmd) {
-        originalHandler(registry)
+        originalHandler(registry, commandData)
       }
     }
     emitter.on(event, handler)
