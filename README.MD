@@ -142,7 +142,7 @@ import { Loadable } from '@rispa/vendor/loadable'
 const loadable = (store, when) => Loadable({
   LoadingComponent: () => null,
   loader: () => import('./register'),
-  resolveModule: module => module(store, when),
+  resolveModule: module => module.default(store, when),
   webpackRequireWeakId: () => require.resolveWeak('./register'),
 })
 
@@ -211,7 +211,7 @@ import { Switch, Route } from 'react-router-dom'
 const getRoutes = (store, when) => {
   /* eslint-disable global-require */
   const modules = [
-    require('feature-plugin')
+    require('feature-plugin').default
     // $$ ADD HERE ~~ Do not remove
   ]
 
