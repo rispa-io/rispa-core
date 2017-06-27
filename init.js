@@ -13,13 +13,12 @@ const scanActivators = () => {
 }
 
 const getActivatorsFromCache = () => {
-  const cacheActivatorsPath = path.resolve(__dirname, '../../build/activators.json')
-
-  const cache = fs.readJsonSync(cacheActivatorsPath, { throws: false })
+  const cachePath = path.resolve(__dirname, '../../build/plugins.json')
+  const cache = fs.readJsonSync(cachePath, { throws: false })
 
   if (cache) {
-    const activators = Object.values(cache.packages)
-      .map(plugin => plugin.activatorPath)
+    const activators = Object.values(cache.plugins)
+      .map(plugin => plugin.activator)
       .filter(activator => !!activator)
       .map(activator => require(activator))
 
