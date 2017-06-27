@@ -79,9 +79,9 @@ describe('init', () => {
 
     mockFs.setMockFiles({
       [basePath]: {
-        packages: {
+        plugins: {
           [pluginsNames[0]]: {
-            activatorPath: activatorsPaths[0],
+            activator: activatorsPaths[0],
           },
         },
       },
