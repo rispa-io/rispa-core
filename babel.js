@@ -16,5 +16,5 @@ module.exports = {
     require.resolve('babel-plugin-dynamic-import-webpack'),
   ],
 
-  ignore: /node_modules\/(?!@rispa)/
+  ignore: /node_modules\/(?!@rispa)/,
 }
