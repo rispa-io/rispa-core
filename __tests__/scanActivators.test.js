@@ -41,7 +41,7 @@ describe('scan activators', () => {
     mockFs.setMockFiles(Object.assign(
       {
         [path.resolve(projectDir, `./${LERNA_JSON}`)]: {
-          packages: ['packages/*']
+          packages: ['packages/*'],
         },
       },
       pluginNames.reduce((files, pluginName) => {
@@ -119,7 +119,7 @@ describe('deduplicate activators', () => {
       path.resolve(packagesPath1, `./${pluginName}`, ACTIVATOR_PATH),
       path.resolve(packagesPath2, `./${pluginName}`, ACTIVATOR_PATH),
       path.resolve(packagesPath3, ACTIVATOR_PATH),
-      '/invalid-path'
+      '/invalid-path',
     ]
 
     mockFs.setMockFiles({
@@ -129,7 +129,7 @@ describe('deduplicate activators', () => {
       [path.resolve(packagesPath2, `./${pluginName}`, `./${PACKAGE_JSON}`)]: {
         name: pluginName,
       },
-      [path.resolve(packagesPath3, `./${PACKAGE_JSON}`)]: null
+      [path.resolve(packagesPath3, `./${PACKAGE_JSON}`)]: null,
     })
 
     expect(deduplicateActivators(activatorPaths)).toEqual([activatorPaths[1]])
@@ -142,7 +142,7 @@ describe('read plugins paths', () => {
   it('should success read', () => {
     mockFs.setMockFiles({
       [path.resolve(projectDir, `./${LERNA_JSON}`)]: {
-        packages: ['packages/*']
+        packages: ['packages/*'],
       },
     })
 

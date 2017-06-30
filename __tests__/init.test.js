@@ -48,14 +48,14 @@ describe('init', () => {
   it('should filter command which specified after `:`', () => {
     const handler1 = jest.fn()
     const handler2 = jest.fn()
-    const activator = on => {
+    const activator1 = on => {
       on('init:one', handler1)
       on('init:two', handler2)
     }
 
     const emitter = new EventEmitter()
 
-    init('one', {}, [activator], emitter)
+    init('one', {}, [activator1], emitter)
     expect(handler1).toBeCalled()
     expect(handler2).not.toBeCalled()
   })
