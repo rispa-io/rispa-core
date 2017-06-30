@@ -24,7 +24,7 @@
     "debug": "^2.6.6",
     "fs-extra": "^3.0.1",
     "glob": "^7.1.2",
-    "plop": "^1.7.4"
+    "plop": "^1.8.0"
   },
   "scripts": {
     "test": "jest",
