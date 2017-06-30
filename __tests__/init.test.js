@@ -4,10 +4,10 @@ import runInit, { init } from '../init'
 jest.resetAllMocks()
 jest.mock('events')
 jest.mock('../registry')
-jest.mock('../scanActivators', () => require.requireActual('../__mocks__/scanActivators'))
+jest.mock('../scanActivators')
 
 const mockEvents = require.requireMock('events')
-const { setMockActivators } = require.requireMock('../scanActivators')
+const { default: mockScanActivators } = require.requireMock('../scanActivators')
 
 const mockCreateRegistry = require.requireMock('../registry')
 
@@ -17,7 +17,7 @@ describe('init', () => {
     off()
   })
 
-  setMockActivators([activator])
+  mockScanActivators.mockImplementation(() => [activator])
 
   it('should success init activators', () => {
     const addListener = jest.fn()
