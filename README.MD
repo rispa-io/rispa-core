@@ -124,7 +124,7 @@ To add a new feature, you should create a plugin. To do this, you can use the ge
 ```
 ris core g
 ```
-Then pick `feature-plugin` in the list and specify the name. The plugin will be added to the `packages` folder and will have the following structure:
+Then pick `feature-plugin` in the list and specify the name and the route path. The plugin will be added to the `packages` folder and will have the following structure:
 ```
 .
 ├── feature-plugin
@@ -137,7 +137,7 @@ Then pick `feature-plugin` in the list and specify the name. The plugin will be 
 
 
 ```javascript
-import { Loadable } from '@rispa/vendor/loadable'
+import Loadable from '@rispa/vendor/loadable'
 
 const loadable = (store, when) => Loadable({
   LoadingComponent: () => null,
@@ -181,51 +181,7 @@ const registerModule = (store, when) => {
 export default registerModule
 ```
 
-
-After you create a plugin you should register it in the rispa-routes plugin. First of all add your plugin as a dependency for rispa-routes in its package.json:
-
-```json
-{
-  "name": "@rispa/routes",
-  "version": "0.1.0",
-  "description": "rispa routes",
-  "devDependencies": {
-    "@rispa/eslint-config": "^1.0.0"
-  },
-  "dependencies": {
-    "feature-plugin": "^0.1.0",
-    "react-router-dom": "^4.1.1",
-    "react": "15.5.4",
-    "react-dom": "15.5.4"
-  }
-}
-```
+After you create a plugin it's automatically added as a dependency to `rispa-routes` plugin and registered as a Route in global Switch
 
 
-Then add `require('feature-plugin')` to modules array in the `index.js` of the `rispa-routes` plugin:
-
-```javascript
-import React from 'react'
-import { Switch, Route } from 'react-router-dom'
-
-const getRoutes = (store, when) => {
-  /* eslint-disable global-require */
-  const modules = [
-    require('feature-plugin').default
-    // $$ ADD HERE ~~ Do not remove
-  ]
-
-  const routes = modules
-    .map(module => module(store, when))
-    .filter(Boolean)
-
-  return (
-    <Switch>
-      {routes.map(params => <Route key={params.path} {...params} />)}
-    </Switch>
-  )
-}
-
-export default getRoutes
-```
 
