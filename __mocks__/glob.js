@@ -1,4 +1,3 @@
-// const glob = jest.genMockFromModule('glob') - not working
 const glob = {}
 
 let mockPaths = {
