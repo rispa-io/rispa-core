@@ -1,6 +1,6 @@
-const getBabelrcConfig = require('./babel.js')
+const babelConfig = require('./babel.js')
 
-require('babel-register')(getBabelrcConfig())
+require('babel-register')(babelConfig)
 
 const { default: init } = require('./init')
 
