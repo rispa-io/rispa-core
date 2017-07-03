@@ -1,34 +1,6 @@
-const fs = require('fs-extra')
-const glob = require('glob')
-const path = require('path')
-const EventEmitter = require('events')
-const createRegistry = require('./registry')
-
-const scanActivators = () => {
-  const relPath = path.resolve(__dirname, '../')
-  const activators = glob
-    .sync(`${relPath}/*/.rispa/activator.js`)
-    .map(activator => require(activator))
-  return activators
-}
-
-const getActivatorsFromCache = () => {
-  const cachePath = path.resolve(__dirname, '../../build/plugins.json')
-  const cache = fs.readJsonSync(cachePath, { throws: false })
-
-  if (cache) {
-    const activators = Object.values(cache.plugins)
-      .map(plugin => plugin.activator)
-      .filter(activator => !!activator)
-      .map(activator => require(activator))
-
-    return activators
-  }
-
-  return false
-}
-
-const getActivators = () => getActivatorsFromCache() || scanActivators()
+import EventEmitter from 'events'
+import createRegistry from './registry'
+import scanActivators from './scanActivators'
 
 export function init(command, data, activators, emitter) {
   const on = (originalEvent, originalHandler) => {
@@ -57,7 +29,7 @@ export function init(command, data, activators, emitter) {
 }
 
 export default function runInit(command, data) {
-  const activators = getActivators()
+  const activators = scanActivators(process.cwd())
   const emitter = new EventEmitter()
   init(command, data, activators, emitter)
 }
