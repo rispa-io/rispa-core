@@ -31,5 +31,7 @@ export function init(command, data, activators, emitter) {
 export default function runInit(command, data) {
   const activators = scanActivators(process.cwd())
   const emitter = new EventEmitter()
+  emitter.setMaxListeners(100)
+
   init(command, data, activators, emitter)
 }

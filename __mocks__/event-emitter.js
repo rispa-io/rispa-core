@@ -14,3 +14,5 @@ export default class EventEmitter {
     this.listeners[event].push(listener)
   }
 }
+
+EventEmitter.prototype.setMaxListeners = jest.fn()

@@ -43,6 +43,7 @@ describe('init', () => {
     expect(emit).toBeCalledWith('init', command, registry, data)
     expect(emit).toBeCalledWith('prepare', command, registry, data)
     expect(emit).toHaveBeenLastCalledWith('start', command, registry, data)
+    expect(mockEvents.prototype.setMaxListeners).toBeCalledWith(100)
   })
 
   it('should filter command which specified after `:`', () => {
