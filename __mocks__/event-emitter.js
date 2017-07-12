@@ -1,5 +1,7 @@
 export default class EventEmitter {
-  listeners = {};
+  listeners = {}
+  maxListeners = 10
+
   emit(event, ...args) {
     if (this.listeners[event]) {
       this.listeners[event].forEach(listener => {
@@ -7,12 +9,15 @@ export default class EventEmitter {
       })
     }
   }
+
   on(event, listener) {
     if (!this.listeners[event]) {
       this.listeners[event] = []
     }
     this.listeners[event].push(listener)
   }
-}
 
-EventEmitter.prototype.setMaxListeners = jest.fn()
+  setMaxListeners(maxListeners) {
+    this.maxListeners = maxListeners
+  }
+}
