@@ -23,6 +23,7 @@ describe('init', () => {
     const addListener = jest.fn()
     const removeListener = jest.fn()
     const emit = jest.fn()
+    const setMaxListeners = jest.fn()
 
     const registry = Object.create(null)
     const command = 'command'
@@ -31,7 +32,7 @@ describe('init', () => {
     mockCreateRegistry.setMockReturnValue(registry)
 
     mockEvents.setMockMethods({
-      on: addListener, removeListener, emit,
+      on: addListener, removeListener, emit, setMaxListeners,
     })
 
     expect(runInit(command, data)).toBeUndefined()
@@ -43,6 +44,7 @@ describe('init', () => {
     expect(emit).toBeCalledWith('init', command, registry, data)
     expect(emit).toBeCalledWith('prepare', command, registry, data)
     expect(emit).toHaveBeenLastCalledWith('start', command, registry, data)
+    expect(setMaxListeners).toBeCalledWith(100)
   })
 
   it('should filter command which specified after `:`', () => {
