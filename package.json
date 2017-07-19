@@ -1,6 +1,7 @@
 {
   "name": "@rispa/core",
   "rispa:name": "core",
+  "rispa:postintall": "lerna bootstrap && ris clean-cache",
   "version": "2.1.1",
   "description": "rispa core plugin",
   "license": "MIT",
