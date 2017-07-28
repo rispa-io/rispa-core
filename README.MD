@@ -80,11 +80,11 @@ rispa&#x2011;webpack       |Makes build for dev server and production
 To start work you should install rispa-cli globally. It provides command to run and maintain app:
 
 ```bash
-yarn global add rispa-cli
+yarn global add @rispa/cli
 ```
 or
 ```bash
-npm install -g rispa-cli
+npm install -g @rispa/cli
 ```
 
 We use yarn as a package manager by default. To switch to npm you may change it in the lerna configuration (lerna.json)
