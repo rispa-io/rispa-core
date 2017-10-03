@@ -44,9 +44,14 @@ export const deduplicateActivators = activatorsPaths => {
   return Object.values(activatorsByName)
 }
 
-export const readActivatorsCache = projectPath => {
+export const readPluginsCache = projectPath => {
   const pluginsCachePath = path.resolve(projectPath, PLUGINS_CACHE_PATH)
-  const pluginsCache = fs.readJsonSync(pluginsCachePath, { throws: false })
+
+  return fs.readJsonSync(pluginsCachePath, { throws: false })
+}
+
+export const readActivatorsCache = projectPath => {
+  const pluginsCache = readPluginsCache(projectPath)
   if (!pluginsCache || !pluginsCache.plugins) {
     return null
   }

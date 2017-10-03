@@ -7,7 +7,9 @@
   "license": "MIT",
   "devDependencies": {
     "@rispa/eslint-config": ">=3.0.0",
-    "jest": "^20.0.3"
+    "jest": "^20.0.3",
+    "typescript": "^2.5.2",
+    "typings": "^2.1.1"
   },
   "dependencies": {
     "babel-plugin-add-module-exports": "^0.2.1",
@@ -23,11 +25,13 @@
     "babel-preset-react": "^6.24.1",
     "babel-register": "^6.24.1",
     "debug": "^2.6.6",
+    "dependency-graph": "^0.5.0",
     "fs-extra": "^3.0.1",
     "glob": "^7.1.2",
     "plop": "^1.8.0"
   },
   "scripts": {
+    "build": "tsc",
     "test": "jest",
     "test:update": "jest -u",
     "test:coverage": "jest --coverage",
