@@ -1,8 +1,9 @@
-import {RispaContext} from './RispaContext'
-import {PluginInstance} from './PluginInstance'
+import { RispaContext } from './RispaContext'
+import { PluginInstance } from './PluginInstance'
 import RispaConfig from './RispaConfig'
 
-export interface IPluginName extends String { }
+export interface IPluginName extends String {
+}
 
 type PluginModule = {
   name: IPluginName,

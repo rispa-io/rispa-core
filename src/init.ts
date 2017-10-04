@@ -1,6 +1,6 @@
-import createRispaContext, {RispaContext, StartHandler} from './RispaContext'
+import createRispaContext, { RispaContext, StartHandler } from './RispaContext'
 import RispaConfig from './RispaConfig'
-import {readPluginsCache} from '../scanActivators'
+import { readPluginsCache } from '../scanActivators'
 import PluginModule from './PluginModule'
 
 function readConfig(): RispaConfig {
@@ -22,7 +22,7 @@ function mapPlugins(config: RispaConfig, opts: InitOptions): PluginModule[] {
   return Object.values(config.plugins)
     .reduce((modules, plugin) => {
       if (plugin.activator) {
-        const {default: init, after} = opts.require(plugin.activator)
+        const { default: init, after } = opts.require(plugin.activator)
 
         modules.push({
           name: plugin.name,

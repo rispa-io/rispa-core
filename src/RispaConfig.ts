@@ -1,5 +1,5 @@
 import PluginModule from './PluginModule'
-import {StartHandler} from './RispaContext'
+import { StartHandler } from './RispaContext'
 
 type RispaConfig = {
   startHandler: StartHandler,

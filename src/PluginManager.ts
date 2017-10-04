@@ -22,6 +22,9 @@ export class PluginManager {
     this.instances = new Map()
   }
 
+  /*
+    Add plugin with dependencies
+   */
   public add(pluginModule: PluginModule): void {
     if (!this.has(pluginModule.name)) {
       this.graph.addNode(pluginModule.name as string, pluginModule)
@@ -30,32 +33,46 @@ export class PluginManager {
         pluginModule.after.forEach(dependencyName => {
           this.graph.addDependency(
             pluginModule.name as string,
-            dependencyName as string
+            dependencyName as string,
           )
         })
       }
     }
   }
 
+  /*
+    Remove plugin
+
+    Throws if not started
+   */
   public remove(pluginName: IPluginName): void {
     // assert not started
     // remove plugin from graph
 
     if (this.isStarted(pluginName)) {
-      throw new Error('Can\'t remove started plugin')
+      throw 'Can\'t remove started plugin'
     }
 
     this.graph.removeNode(pluginName as string)
   }
 
+  /*
+    Get plugin
+   */
   public get(pluginName: IPluginName): PluginInstance {
     return this.instances.get(pluginName)
   }
 
+  /*
+    Has plugin
+   */
   public has(pluginName: IPluginName): boolean {
     return this.graph.hasNode(pluginName as string)
   }
 
+  /*
+    Create instance
+   */
   public instantiate(pluginName: IPluginName): PluginInstance {
     // call init function
     const pluginModule = this.graph.getNodeData(pluginName as string)
@@ -63,6 +80,9 @@ export class PluginManager {
     return pluginModule.init(this.context, this.config)
   }
 
+  /*
+    Validate plugin
+   */
   public validate(pluginModule): [string] {
     const validators = [
       // validateName,
@@ -75,10 +95,10 @@ export class PluginManager {
     ), [])
   }
 
+  /*
+    Create plugin instance and call start
+   */
   public start(pluginName: IPluginName): void {
-    // create and store plugin instance
-    // place state markers
-
     if (this.isStopped(pluginName)) {
       const instance: PluginInstance = this.instantiate(pluginName)
 
@@ -88,9 +108,10 @@ export class PluginManager {
     }
   }
 
+  /*
+    Stop started plugin
+   */
   public stop(pluginName: IPluginName): void {
-    // remove
-
     if (this.isStarted(pluginName)) {
       this.instances.get(pluginName).stop()
 
@@ -106,7 +127,20 @@ export class PluginManager {
     return !this.isStarted(pluginName)
   }
 
-  public build() {
+  private validateAll() {
+    const { plugins } = this.config
+
+    const errors = plugins.reduce((results, pluginModule) => ([
+      ...results,
+      ...this.validate(pluginModule),
+    ]), [])
+
+    if (errors.length > 0) {
+      throw errors
+    }
+  }
+
+  private build() {
     const { plugins } = this.config
 
     plugins.forEach(pluginModule => {
@@ -114,7 +148,7 @@ export class PluginManager {
     });
   }
 
-  public startAll() {
+  private startAll() {
     const pluginsOrder = this.graph.overallOrder()
 
     pluginsOrder.forEach(pluginName => {
