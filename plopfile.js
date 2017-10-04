@@ -1,10 +1,10 @@
-const { generator: generatorEvent } = require('./events')
+// const { generator: generatorEvent } = require('./events')
 const path = require('path')
 const fs = require('fs')
-const core = require('./index')
+// const core = require('./index')
 
 module.exports = plop => {
-  core(generatorEvent(), plop)
+  // core(generatorEvent(), plop)
 
   const featureList =
     fs.readdirSync('../')
