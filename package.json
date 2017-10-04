@@ -5,6 +5,7 @@
   "description": "rispa core plugin",
   "license": "MIT",
   "main": "./lib/index.js",
+  "typings": "./lib/index.d.ts",
   "devDependencies": {
     "@types/node": "^8.0.31",
     "jest": "^20.0.3",

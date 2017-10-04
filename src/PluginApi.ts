@@ -4,7 +4,7 @@ import { IPluginName } from './PluginModule'
 
 export type PublicMethod<R> = (instance: R, ...args: any[]) => any
 
-type PluginApi<R extends PluginInstance> = {
+interface PluginApi<R extends PluginInstance> {
   [key: string]: PublicMethod<R> | IPluginName | StartHandler
 
   pluginName: IPluginName
