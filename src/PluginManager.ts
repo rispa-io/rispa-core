@@ -156,7 +156,7 @@ export class PluginManager {
     })
   }
 
-  public loadAll() {
+  public async loadAll(): Promise<RispaContext> {
     // validate
     this.validateAll()
 
@@ -165,5 +165,7 @@ export class PluginManager {
 
     // start all not started
     this.startAll()
+
+    return this.context
   }
 }
