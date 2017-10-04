@@ -1,15 +1,15 @@
 {
   "name": "@rispa/core",
   "rispa:name": "core",
-  "rispa:postinstall": "lerna bootstrap && ris clean-cache",
   "version": "3.0.1",
   "description": "rispa core plugin",
   "license": "MIT",
+  "main": "./lib/init.js",
   "devDependencies": {
     "@rispa/eslint-config": ">=3.0.0",
     "jest": "^20.0.3",
     "typescript": "^2.5.2",
-    "typings": "^2.1.1"
+    "@types/node": "^8.0.31"
   },
   "dependencies": {
     "babel-plugin-add-module-exports": "^0.2.1",
