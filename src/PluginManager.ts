@@ -1,4 +1,4 @@
-import * as DepGraph from 'dependency-graph'
+import DepGraph from 'dependency-graph'
 import { RispaContext } from './RispaContext'
 import { PluginInstance } from './PluginInstance'
 import PluginModule, { IPluginName } from './PluginModule'
@@ -11,24 +11,29 @@ export default function create(context: RispaContext): PluginManager {
 export class PluginManager {
   private config: RispaConfig
   private context: RispaContext
-  private graph: DepGraph<PluginInstance>
-  private started: IPluginName[]
+  private graph: DepGraph<PluginModule>
+  private instances: Map<IPluginName, PluginInstance>
 
   constructor(context: RispaContext) {
     this.context = context
     this.config = context.config
 
     this.graph = new DepGraph()
-    this.started = []
+    this.instances = new Map()
   }
 
   public add(pluginModule: PluginModule): void {
-    if (!this.graph.hasNode(pluginModule.name)) {
-      this.graph.addNode(pluginModule.name, this.instantiate(pluginModule))
+    if (!this.has(pluginModule.name)) {
+      this.graph.addNode(pluginModule.name as string, pluginModule)
 
-      pluginModule.after.forEach(dependencyName => {
-        this.graph.addDependency(pluginModule.name, dependencyName)
-      })
+      if (pluginModule.after) {
+        pluginModule.after.forEach(dependencyName => {
+          this.graph.addDependency(
+            pluginModule.name as string,
+            dependencyName as string
+          )
+        })
+      }
     }
   }
 
@@ -40,19 +45,20 @@ export class PluginManager {
       throw new Error('Can\'t remove started plugin')
     }
 
-    this.graph.removeNode(pluginName)
+    this.graph.removeNode(pluginName as string)
   }
 
   public get(pluginName: IPluginName): PluginInstance {
-    return this.graph.getNode(pluginName)
+    return this.instances.get(pluginName)
   }
 
   public has(pluginName: IPluginName): boolean {
-    return this.graph.hasNode(pluginName)
+    return this.graph.hasNode(pluginName as string)
   }
 
-  public instantiate(pluginModule: PluginModule): PluginInstance {
+  public instantiate(pluginName: IPluginName): PluginInstance {
     // call init function
+    const pluginModule = this.graph.getNodeData(pluginName as string)
 
     return pluginModule.init(this.context, this.config)
   }
@@ -74,9 +80,11 @@ export class PluginManager {
     // place state markers
 
     if (this.isStopped(pluginName)) {
-      this.get(pluginName).start();
+      const instance: PluginInstance = this.instantiate(pluginName)
 
-      this.started = [...this.started, pluginName]
+      instance.start();
+
+      this.instances.set(pluginName, instance)
     }
   }
 
@@ -84,46 +92,43 @@ export class PluginManager {
     // remove
 
     if (this.isStarted(pluginName)) {
-      this.get(pluginName).stop()
+      this.instances.get(pluginName).stop()
 
-      this.started = this.started.filter(name => name !== pluginName)
+      this.instances.delete(pluginName)
     }
   }
 
   public isStarted(pluginName: IPluginName): boolean {
-    return this.started.indexOf(pluginName) !== -1
+    return this.instances.has(pluginName)
   }
 
   public isStopped(pluginName: IPluginName): boolean {
     return !this.isStarted(pluginName)
   }
 
-  public build(): boolean {
-    // sort graph
-
-    return true
-  }
-
-  public loadAll(): boolean {
+  public build() {
     const { plugins } = this.config
 
-    // validate
-
-    // build
-    this.build()
-
-    // add all plugins from config if not exists
     plugins.forEach(pluginModule => {
       this.add(pluginModule)
     });
+  }
 
-    // start all not started
+  public startAll() {
     const pluginsOrder = this.graph.overallOrder()
 
     pluginsOrder.forEach(pluginName => {
       this.start(pluginName)
     })
+  }
 
-    return true
+  public loadAll() {
+    // validate
+
+    // build
+    this.build()
+
+    // start all not started
+    this.startAll()
   }
 }

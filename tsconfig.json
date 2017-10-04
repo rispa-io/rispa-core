@@ -8,7 +8,11 @@
     "outDir": "lib",
     "target": "es6",
     "sourceMap": true,
-    "allowJs": true
+    "allowJs": true,
+    "typeRoots" : [
+      "./node_modules/@types",
+      "./typings"
+    ]
   },
   "include": [
     "src/**/*"
