@@ -49,7 +49,7 @@ function mapPlugins(config: RispaConfig, opts: InitOptions): PluginModule[] {
 }
 
 export default function init(startHandler: StartHandler, opts: InitOptions = defaultOptions): Promise<RispaContext> {
-  opts.require = opts.require || require
+  opts.require = opts.require || defaultOptions.require
 
   const config: RispaConfig = {
     startHandler,
