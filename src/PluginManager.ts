@@ -1,6 +1,6 @@
 import { DepGraph } from 'dependency-graph'
 import { RispaContext } from './RispaContext'
-import { PluginInstance } from './PluginInstance'
+import PluginInstance from './PluginInstance'
 import PluginModule, { IPluginName } from './PluginModule'
 import RispaConfig from './RispaConfig'
 

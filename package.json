@@ -4,7 +4,7 @@
   "version": "3.0.1",
   "description": "rispa core plugin",
   "license": "MIT",
-  "main": "./lib/init.js",
+  "main": "./lib/index.js",
   "devDependencies": {
     "@rispa/eslint-config": ">=3.0.0",
     "jest": "^20.0.3",

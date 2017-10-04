@@ -1,7 +1,7 @@
 import createPluginManager, { PluginManager } from './PluginManager'
 import RispaConfig from './RispaConfig'
 import { IPluginName } from './PluginModule'
-import { PluginInstance } from './PluginInstance'
+import PluginInstance from './PluginInstance'
 
 export type StartHandler = (this: void, context: RispaContext) => RispaContext
 
