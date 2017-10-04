@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "typeRoots" : ["./typings"],
+    "lib": ["es2017"],
     "baseUrl": "./src",
     "module": "commonjs",
     "moduleResolution": "node",
@@ -8,8 +8,11 @@
     "outDir": "lib",
     "target": "es6",
     "sourceMap": true,
-    "declaration": true,
-    "allowJs": true
+    "allowJs": true,
+    "typeRoots" : [
+      "./node_modules/@types",
+      "./typings"
+    ]
   },
   "include": [
     "src/**/*"

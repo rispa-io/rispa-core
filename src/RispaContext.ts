@@ -1,30 +1,22 @@
-import {PluginApi} from './PluginApi'
-import {PluginInstance} from './PluginInstance'
-import createPluginManager, {PluginManager} from './PluginManager'
+import createPluginManager, { PluginManager } from './PluginManager'
+import RispaConfig from './RispaConfig'
 
-export interface IPluginName extends String{}
-
-export interface IRispaContext {
-  add<T extends PluginApi<R>, R extends PluginInstance>(name: IPluginName): T
-  get<R extends PluginInstance>(name: IPluginName): R
-  has(name: IPluginName): Boolean
-  start(startHandler: (this: void, context: IRispaContext) => IRispaContext): void
-}
+export type StartHandler = (this: void, context: RispaContext) => RispaContext
 
 export default function create(config) {
   return new RispaContext(config)
 }
 
-export class RispaContext implements IRispaContext {
-  public config: object
+export class RispaContext {
+  public config: RispaConfig
   private pluginManager: PluginManager
 
-  constructor(config) {
+  constructor(config: RispaConfig) {
     this.config = config
     this.pluginManager = createPluginManager(this)
   }
 
-  public start(startHandler: (this: void, context: RispaContext) => RispaContext): Promise<RispaContext> {
+  public start(startHandler: StartHandler): Promise<RispaContext> {
     this.pluginManager.loadAll() // may be initialization separate by promise.then later
 
     return Promise.resolve(this).then(startHandler)
