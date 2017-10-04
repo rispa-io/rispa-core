@@ -6,9 +6,10 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "devDependencies": {
+    "@types/node": "^8.0.31",
     "jest": "^20.0.3",
     "typescript": "^2.5.2",
-    "@types/node": "^8.0.31"
+    "tslint": "^5.7.0"
   },
   "dependencies": {
     "debug": "^2.6.6",
@@ -20,15 +21,12 @@
     "test": "jest",
     "test:update": "jest -u",
     "test:coverage": "jest --coverage",
-    "lint": "rispa-eslint .",
-    "lint:fix": "rispa-eslint . --fix"
+    "lint": "tslint .",
+    "lint:fix": "tslint . --fix"
   },
   "jest": {
     "collectCoverageFrom": [
-      "**/*.js",
-      "!babel.js",
-      "!index.js",
-      "!.eslintrc.js"
+      "**/*.js"
     ],
     "coveragePathIgnorePatterns": [
       "/coverage/"
