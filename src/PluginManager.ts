@@ -158,6 +158,7 @@ export class PluginManager {
 
   public loadAll() {
     // validate
+    this.validateAll()
 
     // build
     this.build()
