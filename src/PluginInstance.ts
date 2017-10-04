@@ -1,5 +1,18 @@
-export interface PluginInstance {
-  start(): void
+import { RispaContext } from './RispaContext'
+import RispaConfig from './RispaConfig'
 
-  stop(): void
+export default abstract class PluginInstance {
+  context: RispaContext
+  config: RispaConfig
+
+  constructor(context: RispaContext, config: RispaConfig) {
+    this.context = context
+    this.config = config
+  }
+
+  public start() {
+  }
+
+  public stop() {
+  }
 }

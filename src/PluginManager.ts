@@ -1,6 +1,6 @@
-import DepGraph from 'dependency-graph'
+import { DepGraph } from 'dependency-graph'
 import { RispaContext } from './RispaContext'
-import { PluginInstance } from './PluginInstance'
+import PluginInstance from './PluginInstance'
 import PluginModule, { IPluginName } from './PluginModule'
 import RispaConfig from './RispaConfig'
 
@@ -156,7 +156,7 @@ export class PluginManager {
     })
   }
 
-  public loadAll() {
+  public async loadAll(): Promise<RispaContext> {
     // validate
     this.validateAll()
 
@@ -165,5 +165,7 @@ export class PluginManager {
 
     // start all not started
     this.startAll()
+
+    return this.context
   }
 }

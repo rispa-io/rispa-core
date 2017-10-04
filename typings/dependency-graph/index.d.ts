@@ -1,5 +1,5 @@
 declare module "dependency-graph" {
-  export default class DepGraph<T> {
+  export class DepGraph<T> {
     nodes: {
       [key: string]: T,
     }
