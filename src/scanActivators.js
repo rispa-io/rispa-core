@@ -1,6 +1,6 @@
-import fs from 'fs-extra'
-import path from 'path'
-import glob from 'glob'
+import * as fs from 'fs-extra'
+import * as path from 'path'
+import * as glob from 'glob'
 
 export const PLUGINS_CACHE_PATH = './build/plugins.json'
 export const LERNA_JSON = 'lerna.json'

@@ -1,5 +1,7 @@
 import createPluginManager, { PluginManager } from './PluginManager'
 import RispaConfig from './RispaConfig'
+import { IPluginName } from './PluginModule'
+import { PluginInstance } from './PluginInstance'
 
 export type StartHandler = (this: void, context: RispaContext) => RispaContext
 
@@ -14,6 +16,10 @@ export class RispaContext {
   constructor(config: RispaConfig) {
     this.config = config
     this.pluginManager = createPluginManager(this)
+  }
+
+  public get(pluginName: IPluginName): PluginInstance {
+    return this.pluginManager.get(pluginName)
   }
 
   public start(startHandler: StartHandler): Promise<RispaContext> {
