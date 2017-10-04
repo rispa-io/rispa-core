@@ -39,10 +39,10 @@ export class PluginManager {
     return this.graph.hasNode(pluginName)
   }
 
-  public instantiate(pluginName: IPluginName): PluginInstance {
+  public instantiate(pluginModule: PluginModule): PluginInstance {
     // call init function
 
-    return null
+    return pluginModule.init(this.context, this.config)
   }
 
   public validate(pluginModule): [string] {
@@ -101,14 +101,12 @@ export class PluginManager {
     this.build()
 
     // add all plugins from config if not exists
-    plugins.forEach(({ name, init, after }) => {
-      if (!this.graph.hasNode(name)) {
-        const instance: PluginInstance = init(this.context, this.config)
+    plugins.forEach(pluginModule => {
+      if (!this.graph.hasNode(pluginModule.name)) {
+        this.graph.addNode(pluginModule.name, this.instantiate(pluginModule))
 
-        this.graph.addNode(name, instance)
-
-        after.forEach(dependencyName => {
-          this.graph.addDependency(name, dependencyName)
+        pluginModule.after.forEach(dependencyName => {
+          this.graph.addDependency(pluginModule.name, dependencyName)
         })
       }
     });
