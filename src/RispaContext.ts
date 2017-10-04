@@ -4,7 +4,7 @@ import { IPluginName } from './PluginModule'
 import PluginInstance from './PluginInstance'
 import { logError } from './log'
 
-export type StartHandler = (this: void, context: RispaContext) => any
+export type StartHandler = (this: void, context: RispaContext) => RispaContext | Promise<RispaContext>
 
 export default function create(config) {
   return new RispaContext(config)
@@ -23,9 +23,15 @@ export class RispaContext {
     return this.pluginManager.get(pluginName)
   }
 
-  public start(startHandler: StartHandler): Promise<any> {
+  public start(startHandler: StartHandler): Promise<RispaContext> {
     return this.pluginManager.loadAll()
       .then(startHandler)
-      .catch(logError)
+      .catch(error => {
+        logError(error)
+
+        process.exit(1)
+
+        throw error
+      })
   }
 }

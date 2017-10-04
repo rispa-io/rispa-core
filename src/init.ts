@@ -1,4 +1,4 @@
-import createRispaContext, { StartHandler } from './RispaContext'
+import createRispaContext, { RispaContext, StartHandler } from './RispaContext'
 import RispaConfig from './RispaConfig'
 import { readPlugins } from './readPlugins'
 
@@ -18,7 +18,7 @@ const defaultOptions: InitOptions = {
   },
 }
 
-export default function init(startHandler: StartHandler, opts: InitOptions = defaultOptions): Promise<any> {
+export default function init(startHandler: StartHandler, opts: InitOptions = defaultOptions): Promise<RispaContext> {
   opts.require = opts.require || defaultOptions.require
 
   const config: RispaConfig = {
