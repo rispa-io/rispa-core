@@ -1,6 +1,6 @@
 import createRispaContext, { RispaContext, StartHandler } from './RispaContext'
 import RispaConfig from './RispaConfig'
-import { readPluginsCache } from '../scanActivators'
+import { readPluginsCache } from './scanActivators'
 import PluginModule from './PluginModule'
 
 function readConfig(): RispaConfig {
