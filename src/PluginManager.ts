@@ -23,12 +23,24 @@ export class PluginManager {
   }
 
   public add(pluginModule: PluginModule): void {
-    // add plugin with dependencies
+    if (!this.graph.hasNode(pluginModule.name)) {
+      this.graph.addNode(pluginModule.name, this.instantiate(pluginModule))
+
+      pluginModule.after.forEach(dependencyName => {
+        this.graph.addDependency(pluginModule.name, dependencyName)
+      })
+    }
   }
 
   public remove(pluginName: IPluginName): void {
     // assert not started
     // remove plugin from graph
+
+    if (this.isStarted(pluginName)) {
+      throw new Error('Can\'t remove started plugin')
+    }
+
+    this.graph.removeNode(pluginName)
   }
 
   public get(pluginName: IPluginName): PluginInstance {
@@ -102,13 +114,7 @@ export class PluginManager {
 
     // add all plugins from config if not exists
     plugins.forEach(pluginModule => {
-      if (!this.graph.hasNode(pluginModule.name)) {
-        this.graph.addNode(pluginModule.name, this.instantiate(pluginModule))
-
-        pluginModule.after.forEach(dependencyName => {
-          this.graph.addDependency(pluginModule.name, dependencyName)
-        })
-      }
+      this.add(pluginModule)
     });
 
     // start all not started
