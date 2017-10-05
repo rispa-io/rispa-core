@@ -7,7 +7,7 @@
     "pretty": true,
     "outDir": "lib",
     "target": "es6",
-    "sourceMap": true,
+    "sourceMap": false,
     "declaration": true,
     "typeRoots" : [
       "./node_modules/@types",

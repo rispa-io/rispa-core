@@ -2,14 +2,16 @@ import PluginInstance from './PluginInstance'
 import { StartHandler } from './RispaContext'
 import { IPluginName } from './PluginModule'
 
-export type PublicMethod<R> = (instance: R, ...args: any[]) => any
+abstract class PluginApi<TPluginInstance extends PluginInstance> {
+  static pluginName: IPluginName
 
-interface PluginApi<R extends PluginInstance> {
-  [key: string]: PublicMethod<R> | IPluginName | StartHandler
+  static startHandler?: StartHandler
 
-  pluginName: IPluginName
+  instance: TPluginInstance
 
-  startHandler?: StartHandler
+  constructor(instance: TPluginInstance) {
+    this.instance = instance
+  }
 }
 
 export default PluginApi

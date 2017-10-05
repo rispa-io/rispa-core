@@ -3,6 +3,7 @@ import { RispaContext } from './RispaContext'
 import PluginInstance from './PluginInstance'
 import PluginModule, { IPluginName } from './PluginModule'
 import RispaConfig from './RispaConfig'
+import PluginApi from './PluginApi'
 
 export default function create(context: RispaContext): PluginManager {
   return new PluginManager(context)
@@ -13,6 +14,7 @@ export class PluginManager {
   private context: RispaContext
   private graph: DepGraph<PluginModule>
   private instances: Map<IPluginName, PluginInstance>
+  private apiInstances: Map<IPluginName, PluginApi<PluginInstance>>
 
   constructor(context: RispaContext) {
     this.context = context
@@ -20,23 +22,29 @@ export class PluginManager {
 
     this.graph = new DepGraph()
     this.instances = new Map()
+    this.apiInstances = new Map()
   }
 
   /*
-    Add plugin with dependencies
+    Add plugin
    */
-  public add(pluginModule: PluginModule): void {
+  public add = (pluginModule: PluginModule) => {
     if (!this.has(pluginModule.name)) {
       this.graph.addNode(pluginModule.name as string, pluginModule)
+    }
+  }
 
-      if (pluginModule.after) {
-        pluginModule.after.forEach(dependencyName => {
-          this.graph.addDependency(
-            pluginModule.name as string,
-            dependencyName as string,
-          )
-        })
-      }
+  /*
+    Add plugin dependencies
+   */
+  public addDependencies = (pluginModule: PluginModule) => {
+    if (pluginModule.after) {
+      pluginModule.after.forEach(dependencyName => {
+        this.graph.addDependency(
+          pluginModule.name as string,
+          dependencyName as string,
+        )
+      })
     }
   }
 
@@ -45,12 +53,12 @@ export class PluginManager {
 
     Throws if not started
    */
-  public remove(pluginName: IPluginName): void {
+  public remove(pluginName: IPluginName) {
     // assert not started
     // remove plugin from graph
 
     if (this.isStarted(pluginName)) {
-      throw 'Can\'t remove started plugin'
+      throw `[${pluginName}]: Can\'t remove started plugin`
     }
 
     this.graph.removeNode(pluginName as string)
@@ -59,8 +67,23 @@ export class PluginManager {
   /*
     Get plugin
    */
-  public get(pluginName: IPluginName): PluginInstance {
-    return this.instances.get(pluginName)
+  public get(pluginName: IPluginName): PluginApi<PluginInstance> {
+    const instance = this.instances.get(pluginName)
+    const pluginModule = this.graph.getNodeData(pluginName as string)
+
+    if (!pluginModule.api) {
+      throw `[${pluginName}]: Not available API`
+    }
+
+    if (this.apiInstances.has(pluginName)) {
+      return this.apiInstances.get(pluginName)
+    }
+
+    const apiInstance = pluginModule.api(instance)
+
+    this.apiInstances.set(pluginName, apiInstance)
+
+    return apiInstance
   }
 
   /*
@@ -98,7 +121,7 @@ export class PluginManager {
   /*
     Create plugin instance and call start
    */
-  public start(pluginName: IPluginName): void {
+  public start(pluginName: IPluginName) {
     if (this.isStopped(pluginName)) {
       const instance: PluginInstance = this.instantiate(pluginName)
 
@@ -111,7 +134,7 @@ export class PluginManager {
   /*
     Stop started plugin
    */
-  public stop(pluginName: IPluginName): void {
+  public stop(pluginName: IPluginName) {
     if (this.isStarted(pluginName)) {
       this.instances.get(pluginName).stop()
 
@@ -143,9 +166,9 @@ export class PluginManager {
   private build() {
     const { plugins } = this.config
 
-    plugins.forEach(pluginModule => {
-      this.add(pluginModule)
-    });
+    plugins.forEach(this.add);
+
+    plugins.forEach(this.addDependencies)
   }
 
   private startAll() {
@@ -156,7 +179,7 @@ export class PluginManager {
     })
   }
 
-  public async loadAll(): Promise<RispaContext> {
+  public async loadAll(): Promise<void> {
     // validate
     this.validateAll()
 
@@ -165,7 +188,5 @@ export class PluginManager {
 
     // start all not started
     this.startAll()
-
-    return this.context
   }
 }

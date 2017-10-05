@@ -9,8 +9,8 @@ export interface IPluginName extends String {
 type PluginModule = {
   name: IPluginName,
   init: (context: RispaContext, config: RispaConfig) => PluginInstance
+  api?: (instance: PluginInstance) => PluginApi<PluginInstance>,
   after?: IPluginName[],
-  api?: PluginApi<PluginInstance>,
 }
 
 export default PluginModule

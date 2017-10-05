@@ -1,6 +1,7 @@
 import createRispaContext, { RispaContext, StartHandler } from './RispaContext'
 import RispaConfig from './RispaConfig'
 import { readPlugins } from './readPlugins'
+import { logError } from './log'
 
 export type InitOptions = {
   require: RispaConfig['require'],
@@ -29,4 +30,11 @@ export default function init(startHandler: StartHandler, opts: InitOptions = def
   const context = createRispaContext(config)
 
   return context.start(startHandler)
+    .catch(error => {
+      logError(error)
+
+      process.exit(1)
+
+      throw error
+    })
 }
