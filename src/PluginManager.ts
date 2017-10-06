@@ -71,6 +71,10 @@ export class PluginManager {
     const instance = this.instances.get(pluginName)
     const pluginModule = this.graph.getNodeData(pluginName as string)
 
+    if (!instance) {
+      throw `[${pluginName}]: Instance is not yet created (add this plugin to the after)`
+    }
+
     if (!pluginModule.api) {
       throw `[${pluginName}]: Not available API`
     }
