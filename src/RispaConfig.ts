@@ -1,8 +1,4 @@
-import PluginModule from './PluginModule'
-
-type RispaConfig = {
-  plugins: PluginModule[]
-  require: (id: string) => any,
+export default interface RispaConfig {
+  publicPath: string,
+  outputPath: string,
 }
-
-export default RispaConfig

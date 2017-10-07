@@ -1,33 +1,18 @@
 import createRispaContext, { RispaContext, StartHandler } from './RispaContext'
 import RispaConfig from './RispaConfig'
-import { readPlugins } from './readPlugins'
+import PluginModule from './PluginModule'
+import { readPlugins, importPluginModules, importConfig, PluginInfo } from './plugins'
 import { logError } from './log'
 
-export type InitOptions = {
-  require: RispaConfig['require'],
-}
+export default function init(startHandler: StartHandler): Promise<RispaContext> {
+  const pluginsInfo: PluginInfo[] = readPlugins(process.cwd())
 
-const defaultOptions: InitOptions = {
-  require: id => {
-    const module = require(id)
-
-    if (!module.default) {
-      module.default = module
-    }
-
-    return module
-  },
-}
-
-export default function init(startHandler: StartHandler, opts: InitOptions = defaultOptions): Promise<RispaContext> {
-  opts.require = opts.require || defaultOptions.require
-
+  const plugins: PluginModule[] = importPluginModules(pluginsInfo)
   const config: RispaConfig = {
-    plugins: readPlugins(process.cwd(), opts),
-    ...opts,
+    ...importConfig(pluginsInfo)
   }
 
-  const context = createRispaContext(config)
+  const context = createRispaContext(plugins, config)
 
   return context.start(startHandler)
     .catch(error => {

@@ -53,10 +53,7 @@ export class PluginManager {
 
     Throws if not started
    */
-  public remove(pluginName: IPluginName) {
-    // assert not started
-    // remove plugin from graph
-
+  public remove = (pluginName: IPluginName) => {
     if (this.isStarted(pluginName)) {
       throw `[${pluginName}]: Can\'t remove started plugin`
     }
@@ -67,7 +64,7 @@ export class PluginManager {
   /*
     Get plugin
    */
-  public get(pluginName: IPluginName): PluginApi<PluginInstance> {
+  public get = (pluginName: IPluginName): PluginApi<PluginInstance> => {
     const instance = this.instances.get(pluginName)
     const pluginModule = this.graph.getNodeData(pluginName as string)
 
@@ -101,7 +98,6 @@ export class PluginManager {
     Create instance
    */
   public instantiate(pluginName: IPluginName): PluginInstance {
-    // call init function
     const pluginModule = this.graph.getNodeData(pluginName as string)
 
     return pluginModule.init(this.context, this.config)
@@ -125,7 +121,7 @@ export class PluginManager {
   /*
     Create plugin instance and call start
    */
-  public start(pluginName: IPluginName) {
+  public start = (pluginName: IPluginName) => {
     if (this.isStopped(pluginName)) {
       const instance: PluginInstance = this.instantiate(pluginName)
 
@@ -138,7 +134,7 @@ export class PluginManager {
   /*
     Stop started plugin
    */
-  public stop(pluginName: IPluginName) {
+  public stop = (pluginName: IPluginName) => {
     if (this.isStarted(pluginName)) {
       this.instances.get(pluginName).stop()
 
@@ -155,7 +151,7 @@ export class PluginManager {
   }
 
   private validateAll() {
-    const { plugins } = this.config
+    const { plugins } = this.context
 
     const errors = plugins.reduce((results, pluginModule) => ([
       ...results,
@@ -168,9 +164,9 @@ export class PluginManager {
   }
 
   private build() {
-    const { plugins } = this.config
+    const { plugins } = this.context
 
-    plugins.forEach(this.add);
+    plugins.forEach(this.add)
 
     plugins.forEach(this.addDependencies)
   }
@@ -178,9 +174,7 @@ export class PluginManager {
   private startAll() {
     const pluginsOrder = this.graph.overallOrder()
 
-    pluginsOrder.forEach(pluginName => {
-      this.start(pluginName)
-    })
+    pluginsOrder.forEach(this.start)
   }
 
   public async loadAll(): Promise<void> {
