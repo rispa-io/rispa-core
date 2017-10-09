@@ -4,6 +4,7 @@ import PluginInstance from './PluginInstance'
 import PluginModule, { IPluginName } from './PluginModule'
 import RispaConfig from './RispaConfig'
 import PluginApi from './PluginApi'
+import pluginValidators from './pluginValidators'
 
 export default function create(context: RispaContext): PluginManager {
   return new PluginManager(context)
@@ -106,14 +107,8 @@ export class PluginManager {
   /*
     Validate plugin
    */
-  public validate(pluginModule): [string] {
-    const validators = [
-      // validateName,
-      // validateApi,
-      // validateDependencies,
-    ]
-
-    return validators.reduce((result, validator) => (
+  public validate(pluginModule): Array<Error | TypeError> {
+    return pluginValidators.reduce((result, validator) => (
       result.concat(validator(this, pluginModule))
     ), [])
   }
