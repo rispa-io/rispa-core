@@ -29,6 +29,8 @@ export class PluginManager {
   public add = (pluginModule: PluginModule) => {
     if (!this.has(pluginModule.name)) {
       this.graph.addNode(pluginModule.name as string, pluginModule)
+    } else {
+      throw `[${pluginModule.name}]: Plugin already added`
     }
   }
 
