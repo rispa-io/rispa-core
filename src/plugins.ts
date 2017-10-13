@@ -1,23 +1,12 @@
 import * as fs from 'fs-extra'
 import * as path from 'path'
 import PluginModule, { IPluginName } from './PluginModule'
-import RispaConfig from './RispaConfig'
 
 export const importModule = <T>(id: string): any => {
   const module = require(id)
 
   if (!module.default) {
     module.default = module
-  }
-
-  return module
-}
-
-export const importModuleWithoutDefault = <T>(id: string): any => {
-  const module = require(id)
-
-  if (module.default) {
-    return module.default
   }
 
   return module
@@ -42,9 +31,12 @@ export const searchForFile = (dir: string, filename: string): string => {
 export const searchRootProjectDir = (dir: string): string => searchForFile(dir, 'rispa.json')
 
 export type PluginInfo = {
-  name: IPluginName,
+  name: string,
+  packageName: IPluginName,
+  packageAlias: string,
   path: string,
   activator: string,
+  generators: string,
 }
 
 export const readPlugins = (cwd: string): PluginInfo[] => {
@@ -56,25 +48,22 @@ export const readPlugins = (cwd: string): PluginInfo[] => {
     throw new Error('Can\'t find plugins')
   }
 
-  return Object.values(plugins)
-}
-
-export const importConfig = (plugins: PluginInfo[]): RispaConfig => {
-  const configPlugin: PluginInfo = plugins.find(plugin => plugin.name.endsWith('/config'))
-
-  const config: RispaConfig = importModuleWithoutDefault(configPlugin.path)
-
-  return config
+  return plugins
 }
 
 export const importPluginModules = (plugins: PluginInfo[]): PluginModule[] => (
   plugins.reduce((modules, plugin) => {
     if (plugin.activator) {
-      const { default: init, after, api } = importModule(plugin.activator)
+      const {
+        default: instance,
+        api,
+        after = []
+      } = importModule(plugin.activator)
 
       modules.push({
-        name: plugin.name,
-        init,
+        name: api ? api.pluginName : plugin.packageName,
+        path: plugin.path,
+        instance,
         api,
         after,
       })

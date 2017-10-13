@@ -2,7 +2,6 @@ import { DepGraph } from 'dependency-graph'
 import { RispaContext } from './RispaContext'
 import PluginInstance from './PluginInstance'
 import PluginModule, { IPluginName } from './PluginModule'
-import RispaConfig from './RispaConfig'
 import PluginApi from './PluginApi'
 import pluginValidators from './pluginValidators'
 
@@ -11,7 +10,6 @@ export default function create(context: RispaContext): PluginManager {
 }
 
 export class PluginManager {
-  private config: RispaConfig
   private context: RispaContext
   private graph: DepGraph<PluginModule>
   private instances: Map<IPluginName, PluginInstance>
@@ -19,7 +17,6 @@ export class PluginManager {
 
   constructor(context: RispaContext) {
     this.context = context
-    this.config = context.config
 
     this.graph = new DepGraph()
     this.instances = new Map()
@@ -81,7 +78,7 @@ export class PluginManager {
       return this.apiInstances.get(pluginName)
     }
 
-    const apiInstance = pluginModule.api(instance)
+    const apiInstance = new pluginModule.api(instance)
 
     this.apiInstances.set(pluginName, apiInstance)
 
@@ -101,16 +98,20 @@ export class PluginManager {
   public instantiate(pluginName: IPluginName): PluginInstance {
     const pluginModule = this.graph.getNodeData(pluginName as string)
 
-    return pluginModule.init(this.context, this.config)
+    return new pluginModule.instance(this.context)
   }
 
   /*
     Validate plugin
    */
   public validate(pluginModule): Array<Error | TypeError> {
-    return pluginValidators.reduce((result, validator) => (
-      result.concat(validator(this, pluginModule))
-    ), [])
+    const errors = pluginValidators
+      .reduce((results, validator) => ([
+        ...results,
+        ...validator(this, pluginModule)
+      ]), [])
+
+    return errors
   }
 
   /*
@@ -120,7 +121,7 @@ export class PluginManager {
     if (this.isStopped(pluginName)) {
       const instance: PluginInstance = this.instantiate(pluginName)
 
-      instance.start();
+      instance.start()
 
       this.instances.set(pluginName, instance)
     }

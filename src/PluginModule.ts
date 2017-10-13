@@ -1,6 +1,5 @@
 import { RispaContext } from './RispaContext'
 import PluginInstance from './PluginInstance'
-import RispaConfig from './RispaConfig'
 import PluginApi from './PluginApi'
 
 export interface IPluginName extends String {
@@ -8,8 +7,14 @@ export interface IPluginName extends String {
 
 type PluginModule = {
   name: IPluginName,
-  init: (context: RispaContext, config: RispaConfig) => PluginInstance
-  api?: (instance: PluginInstance) => PluginApi<PluginInstance>,
+  path: string,
+  instance: {
+    new(context: RispaContext): PluginInstance
+  },
+  api?: {
+    new(instance: PluginInstance): PluginApi<PluginInstance>,
+    pluginName: IPluginName
+  },
   after?: IPluginName[],
 }
 
