@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "lib": ["es2017"],
+    "baseUrl": "./src",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "pretty": true,
+    "outDir": "lib",
+    "target": "es6",
+    "sourceMap": false,
+    "declaration": true,
+    "typeRoots" : [
+      "./node_modules/@types",
+      "./typings"
+    ]
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
