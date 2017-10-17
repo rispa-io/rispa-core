@@ -110,7 +110,7 @@ export class PluginManager {
     const errors = pluginValidators
       .reduce((results, validator) => ([
         ...results,
-        ...validator(this, pluginModule)
+        ...validator(this, pluginModule),
       ]), [])
 
     return errors

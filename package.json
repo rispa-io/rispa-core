@@ -7,10 +7,11 @@
   "main": "./lib/index.js",
   "typings": "./lib/index.d.ts",
   "devDependencies": {
+    "@rispa/tslint-config": ">=1.0.0",
     "@types/node": "^8.0.31",
     "@types/fs-extra": "^4.0.2",
     "jest": "^20.0.3",
-    "typescript": "^2.5.2",
+    "typescript": "^2.5.3",
     "tslint": "^5.7.0"
   },
   "dependencies": {
@@ -23,8 +24,8 @@
     "test": "jest",
     "test:update": "jest -u",
     "test:coverage": "jest --coverage",
-    "lint": "tslint .",
-    "lint:fix": "tslint . --fix"
+    "lint": "tslint --type-check -p tsconfig.json",
+    "lint:fix": "tslint --fix --type-check -p tsconfig.json"
   },
   "jest": {
     "collectCoverageFrom": [

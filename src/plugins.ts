@@ -2,7 +2,7 @@ import * as fs from 'fs-extra'
 import * as path from 'path'
 import PluginModule, { IPluginName } from './PluginModule'
 
-export const importModule = <T>(id: string): any => {
+export const importModule = <T = any>(id: string): T => {
   const module = require(id)
 
   if (!module.default) {
@@ -33,10 +33,10 @@ export const searchRootProjectDir = (dir: string): string => searchForFile(dir, 
 export type PluginInfo = {
   name: string,
   packageName: IPluginName,
-  packageAlias: string,
+  packageAlias?: string,
   path: string,
-  activator: string,
-  generators: string,
+  activator?: string,
+  generators?: string,
 }
 
 export const readPlugins = (cwd: string): PluginInfo[] => {
@@ -57,7 +57,7 @@ export const importPluginModules = (plugins: PluginInfo[]): PluginModule[] => (
       const {
         default: instance,
         api,
-        after = []
+        after = [],
       } = importModule(plugin.activator)
 
       modules.push({
