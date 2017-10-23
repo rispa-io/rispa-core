@@ -11,9 +11,11 @@ export default abstract class PluginInstance {
     this.context = context
   }
 
+  // tslint:disable-next-line: no-empty
   public start() {
   }
 
+  // tslint:disable-next-line: no-empty
   public stop() {
   }
 }
