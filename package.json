@@ -1,7 +1,7 @@
 {
   "name": "@rispa/core",
   "rispa:name": "core",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "description": "rispa core plugin",
   "license": "MIT",
   "main": "./lib/index.js",
@@ -9,11 +9,11 @@
   "typings": "./lib/index.d.ts",
   "devDependencies": {
     "@rispa/tslint-config": ">=1.0.0",
-    "@types/node": "^8.0.31",
     "@types/fs-extra": "^4.0.2",
+    "@types/node": "^8.0.31",
     "jest": "^20.0.3",
-    "typescript": "^2.5.3",
-    "tslint": "^5.7.0"
+    "tslint": "^5.7.0",
+    "typescript": "^2.5.3"
   },
   "dependencies": {
     "debug": "^2.6.6",
