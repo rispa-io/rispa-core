@@ -1,14 +1,16 @@
 {
   "name": "@rispa/core",
   "rispa:name": "core",
-  "version": "3.0.1",
+  "version": "4.0.1",
   "description": "rispa core plugin",
   "license": "MIT",
   "main": "./lib/index.js",
+  "jsnext:main": "./src/index.js",
   "typings": "./lib/index.d.ts",
   "devDependencies": {
-    "@types/node": "^8.0.31",
+    "@rispa/tslint-config": ">=1.0.0",
     "@types/fs-extra": "^4.0.2",
+    "@types/node": "^8.0.31",
     "jest": "^20.0.3",
     "typescript": "^2.5.3",
     "tslint": "^5.7.0"
@@ -23,8 +25,8 @@
     "test": "jest",
     "test:update": "jest -u",
     "test:coverage": "jest --coverage",
-    "lint": "tslint .",
-    "lint:fix": "tslint . --fix"
+    "lint": "tslint --type-check -p tsconfig.json",
+    "lint:fix": "tslint --fix --type-check -p tsconfig.json"
   },
   "jest": {
     "collectCoverageFrom": [

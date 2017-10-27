@@ -9,3 +9,4 @@ __tests__
 .editorconfig
 .eslintrc.js
 rispa-core-*
+!lib
