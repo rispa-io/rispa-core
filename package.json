@@ -21,7 +21,7 @@
     "fs-extra": "^3.0.1"
   },
   "scripts": {
-    "build": "tsc",
+    "compile": "tsc",
     "test": "jest",
     "test:update": "jest -u",
     "test:coverage": "jest --coverage",
