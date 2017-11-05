@@ -1,7 +1,7 @@
 {
   "name": "@rispa/core",
   "rispa:name": "core",
-  "version": "4.1.2",
+  "version": "4.1.3",
   "description": "rispa core plugin",
   "license": "MIT",
   "main": "./lib/index.js",
