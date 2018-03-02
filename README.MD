@@ -1,5 +1,7 @@
 # Rispa Core
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/rispa-io/rispa-core.svg)](https://greenkeeper.io/)
+
 ## Overview
 
 This package is the core of a modular project system running under rispa. Provides an interface between plug-ins and manages the expansion points. Below is a specification in accordance with which you can develop new plug-ins for this infrastructure.
