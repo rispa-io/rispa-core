@@ -1,21 +1,32 @@
-import createRispaContext, { RispaContext, StartHandler } from './RispaContext'
+import createRispaContext, { StartHandler } from './RispaContext'
 import PluginModule from './PluginModule'
-import { readPlugins, importPluginModules, PluginInfo } from './plugins'
+import { importPluginModules, PluginInfo, readPlugins } from './plugins'
 import { logError } from './log'
+import { isPromise } from './utils'
 
-export default function init(startHandler: StartHandler): Promise<RispaContext> {
+const handleError = error => {
+  logError(error)
+
+  process.exit(1)
+
+  throw error
+}
+
+export default function init(startHandler: StartHandler): any | Promise<any> {
   const pluginsInfo: PluginInfo[] = readPlugins(process.cwd())
 
   const plugins: PluginModule[] = importPluginModules(pluginsInfo)
 
   const context = createRispaContext(plugins)
 
-  return context.start(startHandler)
-    .catch(error => {
-      logError(error)
+  try {
+    const result = context.start(startHandler)
+    if (result && isPromise(result)) {
+      return result.catch(handleError)
+    }
 
-      process.exit(1)
-
-      throw error
-    })
+    return result
+  } catch (error) {
+    handleError(error)
+  }
 }

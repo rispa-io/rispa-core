@@ -3,7 +3,7 @@ import { IPluginName, default as PluginModule } from './PluginModule'
 import PluginInstance from './PluginInstance'
 import PluginApi from './PluginApi'
 
-export type StartHandler = (this: void, context: RispaContext) => RispaContext | Promise<RispaContext>
+export type StartHandler = (this: void, context: RispaContext) => any | Promise<any>
 
 export default function create(plugins: PluginModule[]): RispaContext {
   return new RispaContext(plugins)
@@ -27,8 +27,9 @@ export class RispaContext {
     return this.pluginManager.get(pluginName)
   }
 
-  public start(startHandler: StartHandler): Promise<RispaContext> {
-    return this.pluginManager.loadAll()
-      .then(() => startHandler(this))
+  public start(startHandler: StartHandler): Promise<any> | any {
+    this.pluginManager.loadAll()
+
+    return startHandler(this)
   }
 }

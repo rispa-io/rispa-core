@@ -10,10 +10,10 @@ export default function create(context: RispaContext): PluginManager {
 }
 
 export class PluginManager {
-  private context: RispaContext
-  private graph: DepGraph<PluginModule>
-  private instances: Map<IPluginName, PluginInstance>
-  private apiInstances: Map<IPluginName, PluginApi<PluginInstance>>
+  private readonly context: RispaContext
+  private readonly graph: DepGraph<PluginModule>
+  private readonly instances: Map<IPluginName, PluginInstance>
+  private readonly apiInstances: Map<IPluginName, PluginApi<PluginInstance>>
 
   constructor(context: RispaContext) {
     this.context = context
@@ -175,7 +175,7 @@ export class PluginManager {
     pluginsOrder.forEach(this.start)
   }
 
-  public async loadAll(): Promise<void> {
+  public loadAll() {
     // validate
     this.validateAll()
 
