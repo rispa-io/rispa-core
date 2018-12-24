@@ -10,7 +10,7 @@ export default function create(context: RispaContext): PluginManager {
 }
 
 export class PluginManager {
-  private context: RispaContext
+  private readonly context: RispaContext
   private graph: DepGraph<PluginModule>
   private instances: Map<IPluginName, PluginInstance>
   private apiInstances: Map<IPluginName, PluginApi<PluginInstance>>
@@ -64,7 +64,7 @@ export class PluginManager {
   /*
     Get plugin
    */
-  public get = (pluginName: IPluginName): PluginApi<PluginInstance> => {
+  public get = <T extends PluginApi<PluginInstance>>(pluginName: IPluginName): T => {
     const instance = this.instances.get(pluginName)
     const pluginModule = this.graph.getNodeData(pluginName as string)
 
@@ -77,14 +77,14 @@ export class PluginManager {
     }
 
     if (this.apiInstances.has(pluginName)) {
-      return this.apiInstances.get(pluginName)
+      return this.apiInstances.get(pluginName) as T
     }
 
     const apiInstance = new pluginModule.api(instance)
 
     this.apiInstances.set(pluginName, apiInstance)
 
-    return apiInstance
+    return apiInstance as T
   }
 
   /*
@@ -106,7 +106,7 @@ export class PluginManager {
   /*
     Validate plugin
    */
-  public validate(pluginModule): Array<Error | TypeError> {
+  public validate(pluginModule: PluginModule): Array<Error | TypeError> {
     const errors = pluginValidators
       .reduce((results, validator) => ([
         ...results,

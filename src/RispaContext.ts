@@ -19,7 +19,7 @@ export class RispaContext {
     this.pluginManager = createPluginManager(this)
   }
 
-  public get(pluginName: IPluginName): PluginApi<PluginInstance> {
+  public get<T extends PluginApi<PluginInstance>>(pluginName: IPluginName): T {
     if (!pluginName || typeof pluginName !== 'string') {
       throw 'Invalid plugin name'
     }

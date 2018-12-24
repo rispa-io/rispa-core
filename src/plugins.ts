@@ -1,4 +1,4 @@
-import * as fs from 'fs-extra'
+import fs = require('fs')
 import * as path from 'path'
 import PluginModule, { IPluginName } from './PluginModule'
 
@@ -42,7 +42,7 @@ export type PluginInfo = {
 export const readPlugins = (cwd: string): PluginInfo[] => {
   const pluginsCachePath = path.resolve(searchRootProjectDir(cwd), './build/plugins.json')
 
-  const { plugins } = fs.readJsonSync(pluginsCachePath, { throws: false })
+  const { plugins } = importModule<{ plugins: PluginInfo[] }>(pluginsCachePath)
 
   if (!plugins || plugins.length === 0) {
     throw new Error('Can\'t find plugins')

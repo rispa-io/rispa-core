@@ -1,4 +1,4 @@
-declare module "dependency-graph" {
+declare module 'dependency-graph' {
   export class DepGraph<T> {
     nodes: {
       [key: string]: T,

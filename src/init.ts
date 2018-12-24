@@ -1,7 +1,9 @@
 import createRispaContext, { RispaContext, StartHandler } from './RispaContext'
 import PluginModule from './PluginModule'
 import { readPlugins, importPluginModules, PluginInfo } from './plugins'
-import { logError } from './log'
+import createLogger from './logger'
+
+const logger = createLogger('@rispa')
 
 export default function init(startHandler: StartHandler): Promise<RispaContext> {
   const pluginsInfo: PluginInfo[] = readPlugins(process.cwd())
@@ -12,7 +14,7 @@ export default function init(startHandler: StartHandler): Promise<RispaContext> 
 
   return context.start(startHandler)
     .catch(error => {
-      logError(error)
+      logger.error(error)
 
       process.exit(1)
 

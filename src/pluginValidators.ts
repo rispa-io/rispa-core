@@ -19,7 +19,7 @@ const error = (message: string, pluginModule: PluginModule) => (
 )
 
 
-const validatePluginName = name => name && typeof name === 'string'
+const validatePluginName = (name: any): boolean => name && typeof name === 'string'
 
 function validateName(manager: PluginManager, pluginModule: PluginModule): PluginValidatorErrors {
   const errors = []
