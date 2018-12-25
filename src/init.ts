@@ -12,12 +12,11 @@ export default function init(startHandler: StartHandler): Promise<RispaContext> 
 
   const context = createRispaContext(plugins)
 
-  return context.start(startHandler)
-    .catch(error => {
-      logger.error(error)
+  return context.start(startHandler).catch(error => {
+    logger.error(error)
 
-      process.exit(1)
+    process.exit(1)
 
-      throw error
-    })
+    throw error
+  })
 }

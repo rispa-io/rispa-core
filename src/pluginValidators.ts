@@ -14,10 +14,7 @@ export class RispaValidateError extends Error {
 export type PluginValidatorErrors = RispaValidateError[]
 export type PluginValidator = (manager: PluginManager, pluginModule: PluginModule) => PluginValidatorErrors
 
-const error = (message: string, pluginModule: PluginModule) => (
-  new RispaValidateError(message, pluginModule)
-)
-
+const error = (message: string, pluginModule: PluginModule) => new RispaValidateError(message, pluginModule)
 
 const validatePluginName = (name: any): boolean => name && typeof name === 'string'
 
@@ -73,11 +70,6 @@ function validateDependencies(manager: PluginManager, pluginModule: PluginModule
   return errors
 }
 
-const pluginValidators: PluginValidator[] = [
-  validateName,
-  validateInit,
-  validateApi,
-  validateDependencies,
-]
+const pluginValidators: PluginValidator[] = [validateName, validateInit, validateApi, validateDependencies]
 
 export default pluginValidators

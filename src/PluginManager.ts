@@ -40,10 +40,7 @@ export class PluginManager {
   public addDependencies = (pluginModule: PluginModule) => {
     if (pluginModule.after) {
       pluginModule.after.forEach(dependencyName => {
-        this.graph.addDependency(
-          pluginModule.name as string,
-          dependencyName as string,
-        )
+        this.graph.addDependency(pluginModule.name as string, dependencyName as string)
       })
     }
   }
@@ -107,11 +104,7 @@ export class PluginManager {
     Validate plugin
    */
   public validate(pluginModule: PluginModule): Array<Error | TypeError> {
-    const errors = pluginValidators
-      .reduce((results, validator) => ([
-        ...results,
-        ...validator(this, pluginModule),
-      ]), [])
+    const errors = pluginValidators.reduce((results, validator) => [...results, ...validator(this, pluginModule)], [])
 
     return errors
   }
@@ -151,10 +144,7 @@ export class PluginManager {
   private validateAll() {
     const { plugins } = this.context
 
-    const errors = plugins.reduce((results, pluginModule) => ([
-      ...results,
-      ...this.validate(pluginModule),
-    ]), [])
+    const errors = plugins.reduce((results, pluginModule) => [...results, ...this.validate(pluginModule)], [])
 
     if (errors.length > 0) {
       throw errors

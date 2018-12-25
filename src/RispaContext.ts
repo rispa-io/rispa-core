@@ -28,7 +28,6 @@ export class RispaContext {
   }
 
   public start(startHandler: StartHandler): Promise<RispaContext> {
-    return this.pluginManager.loadAll()
-      .then(() => startHandler(this))
+    return this.pluginManager.loadAll().then(() => startHandler(this))
   }
 }

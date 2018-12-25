@@ -9,7 +9,7 @@ abstract class PluginApi<TPluginInstance extends PluginInstance> {
 
   instance: TPluginInstance
 
-  constructor(instance: TPluginInstance) {
+  protected constructor(instance: TPluginInstance) {
     this.instance = instance
   }
 }

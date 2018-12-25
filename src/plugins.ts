@@ -12,6 +12,14 @@ export const importModule = <T = any>(id: string): T => {
   return module
 }
 
+const importModuleOptional = <T = any>(id: string, defaultValue?: T): T => {
+  try {
+    return importModule(id)
+  } catch {
+    return defaultValue
+  }
+}
+
 export const searchForFile = (dir: string, filename: string): string => {
   let rootDir: string
   let currentDir: string = dir
@@ -31,18 +39,18 @@ export const searchForFile = (dir: string, filename: string): string => {
 export const searchRootProjectDir = (dir: string): string => searchForFile(dir, 'rispa.json')
 
 export type PluginInfo = {
-  name: string,
-  packageName: IPluginName,
-  packageAlias?: string,
-  path: string,
-  activator?: string,
-  generators?: string,
+  name: string
+  packageName: IPluginName
+  packageAlias?: string
+  path: string
+  activator?: string
+  generators?: string
 }
 
 export const readPlugins = (cwd: string): PluginInfo[] => {
   const pluginsCachePath = path.resolve(searchRootProjectDir(cwd), './build/plugins.json')
 
-  const { plugins } = importModule<{ plugins: PluginInfo[] }>(pluginsCachePath)
+  const { plugins = [] } = importModuleOptional<{ plugins?: PluginInfo[] }>(pluginsCachePath, {})
 
   if (!plugins || plugins.length === 0) {
     throw new Error('Can\'t find plugins')
@@ -51,14 +59,10 @@ export const readPlugins = (cwd: string): PluginInfo[] => {
   return plugins
 }
 
-export const importPluginModules = (plugins: PluginInfo[]): PluginModule[] => (
+export const importPluginModules = (plugins: PluginInfo[]): PluginModule[] =>
   plugins.reduce((modules, plugin) => {
     if (plugin.activator) {
-      const {
-        default: instance,
-        api,
-        after = [],
-      } = importModule(plugin.activator)
+      const { default: instance, api, after = [] } = importModule(plugin.activator)
 
       modules.push({
         name: api ? api.pluginName : plugin.packageName,
@@ -71,4 +75,3 @@ export const importPluginModules = (plugins: PluginInfo[]): PluginModule[] => (
 
     return modules
   }, [])
-)
